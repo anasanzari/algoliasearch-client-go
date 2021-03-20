@@ -105,7 +105,7 @@ func (t *Transport) Request(
 	var intermediateNetworkErrors []error
 
 	for _, h := range t.retryStrategy.GetTryableHosts(k) {
-		req, err := buildRequest(t.compression, method, h.host, path, body, headers, urlParams)
+		req, err := buildRequest(t.compression, method, h.scheme, h.host, path, body, headers, urlParams)
 		if err != nil {
 			return err
 		}
@@ -261,14 +261,18 @@ func buildRequestWithBody(method, url string, body interface{}, c compression.Co
 func buildRequest(
 	c compression.Compression,
 	method string,
+	scheme string,
 	host string,
 	path string,
 	body interface{},
 	headers map[string]string,
 	urlParams map[string]string,
 ) (req *http.Request, err error) {
-
-	urlStr := "https://" + host + path
+	sch := "https"
+	if scheme != "" {
+		sch = scheme
+	}
+	urlStr := sch +"://" + host + path
 	isCompressionEnabled := shouldCompress(c, method, body)
 
 	if body == nil {

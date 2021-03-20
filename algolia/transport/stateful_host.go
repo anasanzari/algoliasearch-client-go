@@ -12,6 +12,7 @@ const (
 
 type StatefulHost struct {
 	host       string
+	Scheme	   string
 	isDown     bool
 	retryCount int
 	lastUpdate time.Time

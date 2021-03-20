@@ -13,6 +13,7 @@ type Configuration struct {
 	AppID          string
 	APIKey         string
 	Hosts          []string
+	Scheme         string // http/https
 	MaxBatchSize   int
 	Requester      transport.Requester
 	ReadTimeout    time.Duration

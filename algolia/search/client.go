@@ -50,7 +50,9 @@ func NewClientWithConfig(config Configuration) *Client {
 		hosts = defaultHosts(config.AppID)
 	} else {
 		for _, h := range config.Hosts {
-			hosts = append(hosts, transport.NewStatefulHost(h, call.IsReadWrite))
+			hc := transport.NewStatefulHost(h, call.IsReadWrite)
+			hc.Scheme = config.Scheme
+			hosts = append(hosts, hc)
 		}
 	}
 

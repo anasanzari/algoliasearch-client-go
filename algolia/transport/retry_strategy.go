@@ -23,6 +23,7 @@ const (
 
 type Host struct {
 	host    string
+	scheme  string
 	timeout time.Duration
 }
 
@@ -72,7 +73,7 @@ func (s *RetryStrategy) GetTryableHosts(k call.Kind) (hosts []Host) {
 
 	for _, h := range s.hosts {
 		if !h.isDown && h.accept(k) {
-			hosts = append(hosts, Host{h.host, time.Duration(h.retryCount+1) * baseTimeout})
+			hosts = append(hosts, Host{h.host, h.Scheme, time.Duration(h.retryCount+1) * baseTimeout})
 		}
 	}
 
@@ -83,7 +84,7 @@ func (s *RetryStrategy) GetTryableHosts(k call.Kind) (hosts []Host) {
 	for _, h := range s.hosts {
 		if h.accept(k) {
 			h.reset()
-			hosts = append(hosts, Host{h.host, time.Duration(h.retryCount+1) * baseTimeout})
+			hosts = append(hosts, Host{h.host, h.Scheme, time.Duration(h.retryCount+1) * baseTimeout})
 		}
 	}
 
